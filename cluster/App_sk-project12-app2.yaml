@@ -12,8 +12,8 @@ spec:
   ports:
   - name: "sk-project12-app2-port1"
     protocol: "TCP"
-    port: 8080
-    targetPort: 8080
+    port: 80
+    targetPort: 80
 ---
 apiVersion: "apps/v1"
 kind: "Deployment"
@@ -45,7 +45,7 @@ spec:
         image: "docker.io/library/nginx:latest"
         imagePullPolicy: "Always"
         ports:
-        - containerPort: 8080
+        - containerPort: 80
         volumeMounts:
         - name: "emptydir"
           mountPath: "/emptydir"
