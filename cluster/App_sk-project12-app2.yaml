@@ -1,0 +1,58 @@
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: "sk-project12-app2"
+  labels:
+    app: "sk-project12-app2"
+spec:
+  type: "LoadBalancer"
+  selector:
+    app: "sk-project12-app2"
+  ports:
+  - name: "sk-project12-app2-port1"
+    protocol: "TCP"
+    port: 9093
+    targetPort: 9093
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "sk-project12-app2"
+  namespace: "sk-project12"
+  labels:
+    app: "sk-project12-app2"
+spec:
+  selector:
+    matchLabels:
+      app: "sk-project12-app2"
+  replicas: 3
+  strategy:
+    type: "RollingUpdate"
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: "sk-project12-app2"
+    spec:
+      volumes:
+      - name: "emptydir"
+        emptyDir: {}
+      containers:
+      - name: "sk-project12-app2-container1"
+        image: "docker.io/library/nginx:latest"
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 9093
+        volumeMounts:
+        - name: "emptydir"
+          mountPath: "/emptydir"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "50Mi"
+          limits:
+            cpu: "100m"
+            memory: "50Mi"
